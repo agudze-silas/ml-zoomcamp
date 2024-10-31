@@ -36,9 +36,8 @@ customer = {
 X = dv.transform(customer)
 
 
-model.predict_proba(X)[0,1]
+y_pred = model.predict_proba(X)[0,1]
 
+print(f'Input {customer}')
 
-
-
-
+print(f'churn probability {y_pred}')

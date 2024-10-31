@@ -17,7 +17,7 @@ n_splits = 5
 output_file = f'model_C={C}.bin'
 
 # data preparation 
-df = pd.read_csv('data-week-3.csv')
+df = pd.read_csv('/home/ksilas/ml-zoomcamp/week-5/data-week-3.csv')
 
 df.columns = df.columns.str.lower().str.replace(' ', '_')
 
@@ -81,6 +81,8 @@ def predict(df, dv, model):
 
 # model validation 
 
+print(f'doing validation with C={C}')
+
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=1)
 
 scores = []
@@ -98,18 +100,24 @@ for train_idx, val_idx in kfold.split(df_full_train):
     auc = roc_auc_score(y_val, y_pred)
     scores.append(auc)
 
+print('validation results:')
 print('C=%s %.3f +- %.3f' % (C, np.mean(scores), np.std(scores)))
 
+# training the final model 
+print('training the final model')
 
 dv, model = train(df_full_train, df_full_train.churn.values, C=1.0)
 y_pred = predict(df_test, dv, model)
 
 y_test = df_test.churn.values
 auc = roc_auc_score(y_test, y_pred)
-auc
+
+print(f'auc={auc}')
 
 
 # save the model 
 
 with open(output_file,'wb') as f_out:
     pickle.dump((dv,model), f_out)
+
+print(f'The model is saved to {output_file}')
