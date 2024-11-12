@@ -1,6 +1,6 @@
 import requests
 
-url = "http://172.19.80.223:3636/predict"
+url = "http://0.0.0.0:9696/predict"
 
 customer_id = 'xyz-123'
 customer = {
